@@ -130,7 +130,7 @@ def cep_consulta(**kwargs):
 
 def fecha_plp_servicos_validation_schema():
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-    validation_file = open(os.path.join(BASE_DIR, 'correios/data/layout.xsd'))
+    validation_file = open(os.path.join(BASE_DIR, 'correios/data/layout.xsd'), 'rb')
     schema_root = etree.XML(validation_file.read())
     return etree.XMLSchema(schema_root)
 
@@ -144,7 +144,7 @@ def fecha_plp_servicos(**kwargs):
     xml = render_xml(
         path, "PLP.xml", kwargs,
         validation_schema=fecha_plp_servicos_validation_schema()
-    )
+    ).decode('utf-8')
     kwargs["xml"] = '<?xml version="1.0" encoding="ISO-8859-1" ?>' + xml
     return send("FechaPlpVariosServicos.xml", 'fechaPlpVariosServicosResponse',
                 API, url, encoding="ISO-8859-1", **kwargs)
